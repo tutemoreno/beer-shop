@@ -54,7 +54,7 @@
 
         <v-list-item
           link
-          @click="openTab('https://github.com/tutemoreno/bamboo-app-vue')"
+          @click="openTab('https://github.com/tutemoreno/beer-shop')"
         >
           <v-list-item-icon>
             <v-icon>mdi-github</v-icon>
