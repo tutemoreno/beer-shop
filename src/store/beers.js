@@ -4,7 +4,15 @@ export default {
   namespaced: true,
   state: {
     items: [],
-    filterBy: 'name',
+    filterByOptions: [{ text: 'Name', value: 'beer_name' }],
+    sortByOptions: [{ text: 'Name', value: 'beer_name' }],
+    sortOptions: [
+      { text: 'Asc', value: 'ASC' },
+      { text: 'Desc', value: 'DESC' },
+    ],
+    filterBy: 'beer_name',
+    sortBy: 'name',
+    sort: 'ASC',
     filter: null,
     isLoading: false,
     selection: null,
@@ -17,46 +25,57 @@ export default {
       state.isLoading = v;
     },
     setFilter: (state, v) => {
-      state.filter = v;
+      state.filter = v ? v : null;
     },
     setFilterBy: (state, v) => {
       state.filterBy = v;
     },
-    setSelection: (state, v) => {
-      console.log(v);
-      state.selection = v;
+    setValue: (state, v, key) => {
+      state[key] = v;
     },
   },
   actions: {
-    fetchItems: async ({ commit }) => {
+    fetchItems: async ({ commit, state }) => {
+      const { filter } = state;
       commit('setLoading', true);
 
       const response = await axios({
         method: 'get',
         url: `https://api.punkapi.com/v2/beers`,
+        params: {
+          beer_name: filter,
+        },
       });
 
-      commit('setLoading', false);
       commit('setItems', response.data);
+      commit('setLoading', false);
     },
   },
   getters: {
-    // items: ({ items, filter, filterBy }) =>
-    //   items.filter((item) => item[filterBy].search(filter)),
-    items: ({ items, filter, filterBy }) => {
-      if (!filter) return items;
+    items: ({ items, sortBy, sort }) => {
+      let newItems = [...items];
 
-      const filterLC = filter.toLowerCase();
-      console.log(filterBy);
-      return items.filter((item) =>
-        item[filterBy].toLowerCase().includes(filterLC)
-      );
+      if (sort == 'ASC') {
+        newItems.sort((a, b) => {
+          if (a[sortBy] > b[sortBy]) return 1;
+
+          if (a[sortBy] < b[sortBy]) return -1;
+
+          return 0;
+        });
+      } else {
+        newItems.sort((a, b) => {
+          if (b[sortBy] > a[sortBy]) return 1;
+
+          if (b[sortBy] < a[sortBy]) return -1;
+
+          return 0;
+        });
+      }
+
+      return newItems;
     },
-    filter: ({ filter }) => filter,
-    filterBy: ({ filterBy }) => filterBy,
     isLoading: ({ isLoading }) => isLoading,
-    // items({ items }) {
-    //   return items;
-    // },
+    getState: (state) => (key) => state[key],
   },
 };
