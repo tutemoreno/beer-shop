@@ -9,7 +9,7 @@
       :dense="isMobile"
       v-if="isMobile"
     >
-      <beer-btn
+      <c-btn
         :elevation="0"
         :small="false"
         :outlined="false"
@@ -17,7 +17,7 @@
         @click="openDrawer"
       >
         <v-icon> mdi-menu </v-icon>
-      </beer-btn>
+      </c-btn>
     </v-app-bar>
 
     <v-navigation-drawer
@@ -26,17 +26,17 @@
       v-model="isDrawerOpen"
       :expand-on-hover="!isMobile"
     >
-      <beer-list dense>
+      <c-list dense>
         <v-list-item class="d-flex justify-center">
           <v-list-item-avatar>
             <v-img :src="require('./assets/duff-logo.jpg')"></v-img>
           </v-list-item-avatar>
         </v-list-item>
-      </beer-list>
+      </c-list>
 
       <v-divider></v-divider>
 
-      <beer-list nav dense>
+      <c-list nav dense>
         <v-list-item link to="/">
           <v-list-item-icon>
             <v-icon>mdi-home</v-icon>
@@ -71,7 +71,7 @@
           </v-list-item-icon>
           <v-list-item-title>Linkedin</v-list-item-title>
         </v-list-item>
-      </beer-list>
+      </c-list>
     </v-navigation-drawer>
 
     <v-main class="pa-0">

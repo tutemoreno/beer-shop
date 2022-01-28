@@ -4,16 +4,27 @@ export default {
   namespaced: true,
   state: {
     items: [],
-    filterByOptions: [{ text: 'Name', value: 'beer_name' }],
-    sortByOptions: [{ text: 'Name', value: 'beer_name' }],
-    sortOptions: [
-      { text: 'Asc', value: 'ASC' },
-      { text: 'Desc', value: 'DESC' },
+    searchByOptions: [
+      { text: 'Name', value: 'beer_name' },
+      { text: 'Yeast', value: 'yeast' },
+      { text: 'Hops', value: 'hops' },
+      { text: 'Malt', value: 'malt' },
+      { text: 'Food', value: 'food' },
+      // { text: 'Yeast', value: 'ids' },
     ],
-    filterBy: 'beer_name',
+    sortByOptions: [
+      { text: 'Name', value: 'name' },
+      { text: 'Tagline', value: 'tagline' },
+      { text: 'Abv', value: 'abv' },
+      { text: 'Ibu', value: 'ibu' },
+      { text: 'Ebc', value: 'ebc' },
+    ],
+    sortDesc: false,
+    searchBy: 'beer_name',
+    page: 1,
+    itemsPerPage: 25,
     sortBy: 'name',
-    sort: 'ASC',
-    filter: null,
+    search: null,
     isLoading: false,
     selection: null,
   },
@@ -28,23 +39,25 @@ export default {
       state.filter = v ? v : null;
     },
     setFilterBy: (state, v) => {
-      state.filterBy = v;
+      state.searchBy = v;
     },
-    setValue: (state, v, key) => {
-      state[key] = v;
+    setValue: (state, payload) => {
+      state[payload.key] = payload.value;
     },
   },
   actions: {
     fetchItems: async ({ commit, state }) => {
-      const { filter } = state;
+      const { search, searchBy, page, itemsPerPage } = state;
+      const params = { page, per_page: itemsPerPage };
+
       commit('setLoading', true);
+
+      if (search) params[searchBy] = search.split(' ').join('_');
 
       const response = await axios({
         method: 'get',
         url: `https://api.punkapi.com/v2/beers`,
-        params: {
-          beer_name: filter,
-        },
+        params,
       });
 
       commit('setItems', response.data);
@@ -52,22 +65,22 @@ export default {
     },
   },
   getters: {
-    items: ({ items, sortBy, sort }) => {
+    items: ({ items, sortBy, sortDesc }) => {
       let newItems = [...items];
 
-      if (sort == 'ASC') {
+      if (sortDesc) {
         newItems.sort((a, b) => {
-          if (a[sortBy] > b[sortBy]) return 1;
+          if (b[sortBy] > a[sortBy]) return 1;
 
-          if (a[sortBy] < b[sortBy]) return -1;
+          if (b[sortBy] < a[sortBy]) return -1;
 
           return 0;
         });
       } else {
         newItems.sort((a, b) => {
-          if (b[sortBy] > a[sortBy]) return 1;
+          if (a[sortBy] > b[sortBy]) return 1;
 
-          if (b[sortBy] < a[sortBy]) return -1;
+          if (a[sortBy] < b[sortBy]) return -1;
 
           return 0;
         });

@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'BeerCard',
+  name: 'CCard',
   props: {
     elevation: {
       type: Number,

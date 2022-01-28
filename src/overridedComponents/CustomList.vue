@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'BeerList',
+  name: 'CList',
   inject: ['isMobile'],
   props: {
     dense: {

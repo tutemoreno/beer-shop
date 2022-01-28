@@ -1,22 +1,26 @@
 <template>
-  <v-select v-bind="{ ...$attrs, ...$props }" v-on="$listeners">
-    <slot v-for="(_, name) in $slots" :name="name" :slot="name" />
-  </v-select>
+  <v-btn v-bind="{ ...$attrs, ...$props }" v-on="$listeners">
+    <slot />
+  </v-btn>
 </template>
 <script>
 export default {
-  name: 'BeerSelect',
+  name: 'CBtn',
   inject: ['isMobile'],
   props: {
     outlined: {
       type: Boolean,
       default: true,
     },
-    dense: {
+    small: {
       type: Boolean,
       default() {
         return this.isMobile;
       },
+    },
+    elevation: {
+      type: Number,
+      default: 24,
     },
   },
 };

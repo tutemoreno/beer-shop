@@ -5,17 +5,13 @@
 </template>
 <script>
 export default {
-  name: 'BeerTextField',
+  name: 'CTextField',
   inject: ['isMobile'],
   props: {
     outlined: {
       type: Boolean,
       default: true,
     },
-    // color: {
-    //   type: String,
-    //   default: 'error',
-    // },
     dense: {
       type: Boolean,
       default() {

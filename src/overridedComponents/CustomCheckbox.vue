@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  name: 'BeerCheckbox',
+  name: 'CCheckbox',
   inject: ['isMobile'],
   props: {
     color: {
